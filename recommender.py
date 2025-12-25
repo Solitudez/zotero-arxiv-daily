@@ -4,7 +4,7 @@ from paper import ArxivPaper
 from datetime import datetime
 
 def rerank_paper(candidate:list[ArxivPaper],corpus:list[dict],model:str='Qwen/Qwen3-Embedding-0.6B') -> list[ArxivPaper]:
-    # Qwen3-Embedding-4B 需要 transformers>=4.51.0 和 sentence-transformers>=2.7.0
+    # Qwen3-Embedding-0.6B 需要 transformers>=4.51.0 和 sentence-transformers>=2.7.0
     encoder = SentenceTransformer(
         model,
         trust_remote_code=True,
