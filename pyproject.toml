@@ -11,6 +11,7 @@ dependencies = [
     "pyzotero>=1.5.25",
     "scikit-learn>=1.5.2",
     "sentence-transformers>=3.3.1",
+    "transformers>=4.51.0",
     "openai>=1.57.0",
     "gitignore-parser>=0.1.11",
     "tiktoken>=0.8.0",
