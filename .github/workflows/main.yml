@@ -21,9 +21,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface/hub
-          key: hf-models-qwen3-embedding-4b-v1
+          key: hf-qwen3-embedding-0.6b-${{ hashFiles('pyproject.toml') }}
           restore-keys: |
-            hf-models-qwen3-embedding-4b-
+            hf-qwen3-embedding-0.6b-
             hf-models-
 
       - name: Run script
