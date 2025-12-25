@@ -95,7 +95,8 @@ def rerank_paper(
     if emb_max > 0:
         embedding_scores_norm = embedding_scores / emb_max
     else:
-        embedding_scores_norm = embedding_scores
+        # Edge case: if all embedding scores are 0, use zeros
+        embedding_scores_norm = np.zeros_like(embedding_scores)
   
     # tag_scores 已经在 [0, 1] 范围内
   

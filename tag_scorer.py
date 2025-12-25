@@ -52,7 +52,12 @@ def calculate_tag_score(paper_text: str, tag_counter: Counter, top_k: int = 50) 
   
     score = 0.0
     for tag, count in top_tags:
-        if tag in paper_text_lower:
+        # Use word boundary matching to avoid false positives
+        # E.g., 'ml' won't match 'html', but will match 'ml' or 'ML'
+        import re
+        # Create pattern with word boundaries
+        pattern = r'\b' + re.escape(tag) + r'\b'
+        if re.search(pattern, paper_text_lower):
             score += count
   
     return score / total_weight

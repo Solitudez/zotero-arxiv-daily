@@ -172,7 +172,7 @@ if __name__ == '__main__':
     corpus = get_zotero_corpus(args.zotero_id, args.zotero_key)
     logger.info(f"Retrieved {len(corpus)} papers from Zotero.")
     
-    # 在 corpus = get_zotero_corpus(zot) 之后添加
+    # Debug: verify tags data is being retrieved correctly
     if corpus:
         sample_tags = corpus[0]['data'].get('tags', [])
         print(f"[Debug] Corpus size: {len(corpus)}")
