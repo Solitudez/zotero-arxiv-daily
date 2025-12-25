@@ -171,6 +171,14 @@ if __name__ == '__main__':
     logger.info("Retrieving Zotero corpus...")
     corpus = get_zotero_corpus(args.zotero_id, args.zotero_key)
     logger.info(f"Retrieved {len(corpus)} papers from Zotero.")
+    
+    # 在 corpus = get_zotero_corpus(zot) 之后添加
+    if corpus:
+        sample_tags = corpus[0]['data'].get('tags', [])
+        print(f"[Debug] Corpus size: {len(corpus)}")
+        print(f"[Debug] Sample paper tags: {sample_tags}")
+    else:
+        print("[Warning] Corpus is empty!")
     if args.zotero_ignore:
         logger.info(f"Ignoring papers in:\n {args.zotero_ignore}...")
         corpus = filter_corpus(corpus, args.zotero_ignore)
