@@ -160,7 +160,7 @@ if __name__ == '__main__':
         "--use_gguf_embedding",
         type=bool,
         help="Use GGUF Qwen3-Embedding-4B instead of sentence-transformers",
-        default=(get_env("USE_GGUF_EMBEDDING", "false") or "false").lower() in ("true", "1"),
+        default=get_env("USE_GGUF_EMBEDDING", "false").lower() in ("true", "1"),
     )
     parser.add_argument('--debug', action='store_true', help='Debug mode')
     args = parser.parse_args()
