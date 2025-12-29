@@ -155,6 +155,12 @@ if __name__ == '__main__':
         help="Language of TLDR",
         default="English",
     )
+    add_argument(
+        "--use_gguf_embedding",
+        type=bool,
+        help="Use GGUF Qwen3-Embedding-4B instead of sentence-transformers",
+        default=False,
+    )
     parser.add_argument('--debug', action='store_true', help='Debug mode')
     args = parser.parse_args()
     assert (
@@ -190,8 +196,13 @@ if __name__ == '__main__':
         if not args.send_empty:
           exit(0)
     else:
-        logger.info("Reranking papers...")
-        papers = rerank_paper(papers, corpus)
+        if args.use_gguf_embedding:
+            logger.info("Reranking papers with GGUF Qwen3-Embedding-4B...")
+            from recommender_gguf import rerank_paper_gguf
+            papers = rerank_paper_gguf(papers, corpus)
+        else:
+            logger.info("Reranking papers with sentence-transformers...")
+            papers = rerank_paper(papers, corpus)
         if args.max_paper_num != -1:
             papers = papers[:args.max_paper_num]
         if args.use_llm_api:
