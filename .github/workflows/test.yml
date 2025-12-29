@@ -26,6 +26,15 @@ jobs:
             hf-qwen3-embedding-0.6b-
             hf-models-
 
+      - name: Cache GGUF embedding model
+        if: ${{ vars.USE_GGUF_EMBEDDING == 'true' || vars.USE_GGUF_EMBEDDING == '1' }}
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface/hub/models--Casual-Autopsy--Qwen3-Embedding-4B-GGUFs
+          key: ${{ runner.os }}-gguf-qwen3-embedding-4b
+          restore-keys: |
+            ${{ runner.os }}-gguf-
+
       - name: Run script
         env:
           ZOTERO_ID: ${{ secrets.ZOTERO_ID }}
@@ -44,5 +53,6 @@ jobs:
           OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
           MODEL_NAME: ${{ secrets.MODEL_NAME }}
           LANGUAGE: ${{ vars.LANGUAGE }}
+          USE_GGUF_EMBEDDING: ${{ vars.USE_GGUF_EMBEDDING }}
         run: |
           uv run main.py --debug
