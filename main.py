@@ -91,14 +91,15 @@ def get_arxiv_paper(query:str, debug:bool=False) -> list[ArxivPaper]:
 
 parser = argparse.ArgumentParser(description='Recommender system for academic papers')
 
+def get_env(key: str, default=None):
+    # handle environment variables generated at Workflow runtime
+    # Unset environment variables are passed as '', we should treat them as None
+    v = os.environ.get(key)
+    if v == '' or v is None:
+        return default
+    return v
+
 def add_argument(*args, **kwargs):
-    def get_env(key:str,default=None):
-        # handle environment variables generated at Workflow runtime
-        # Unset environment variables are passed as '', we should treat them as None
-        v = os.environ.get(key)
-        if v == '' or v is None:
-            return default
-        return v
     parser.add_argument(*args, **kwargs)
     arg_full_name = kwargs.get('dest',args[-1][2:])
     env_name = arg_full_name.upper()
@@ -159,7 +160,7 @@ if __name__ == '__main__':
         "--use_gguf_embedding",
         type=bool,
         help="Use GGUF Qwen3-Embedding-4B instead of sentence-transformers",
-        default=False,
+        default=get_env("USE_GGUF_EMBEDDING", "false").lower() in ("true", "1"),
     )
     parser.add_argument('--debug', action='store_true', help='Debug mode')
     args = parser.parse_args()
