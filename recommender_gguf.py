@@ -15,6 +15,7 @@ from datetime import datetime
 from paper import ArxivPaper
 from tag_scorer import extract_user_tags, calculate_tag_score
 from gguf_embedder import GGUFEmbedder
+from loguru import logger
 
 
 def rerank_paper_gguf(
@@ -40,14 +41,19 @@ def rerank_paper_gguf(
         按综合得分降序排列的候选论文列表
     """
     
+    # 添加空 corpus 检查
+    if not corpus:
+        logger.warning("Empty corpus, returning original candidate order")
+        return candidate
+    
     # ===== 初始化 GGUF 嵌入模型 =====
     encoder = GGUFEmbedder()
     
     # ===== Step 1: 提取用户标签 =====
     user_tags = extract_user_tags(corpus)
-    print(f"[Tags] Extracted {len(user_tags)} unique tags from user library")
+    logger.info(f"[Tags] Extracted {len(user_tags)} unique tags from user library")
     if user_tags:
-        print(f"[Tags] Top 10: {user_tags.most_common(10)}")
+        logger.info(f"[Tags] Top 10: {user_tags.most_common(10)}")
     
     # ===== Step 2: 准备 Corpus 数据 =====
     # 按添加日期排序，最新的在前
@@ -107,8 +113,8 @@ def rerank_paper_gguf(
     candidate = sorted(candidate, key=lambda x: x.score, reverse=True)
     
     # 输出调试信息
-    print(f"\n[Rerank-GGUF] Completed. Top 5 recommendations:")
+    logger.info(f"\n[Rerank-GGUF] Completed. Top 5 recommendations:")
     for i, paper in enumerate(candidate[:5]):
-        print(f"  {i+1}. [score={paper.score:.3f}] {paper.title[:70]}...")
+        logger.info(f"  {i+1}. [score={paper.score:.3f}] {paper.title[:70]}...")
     
     return candidate
